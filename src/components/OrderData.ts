@@ -14,10 +14,15 @@ export class OrderData implements IOrderData {
 		total: 0,
 		items: [],
 	};
-	formErrors: Partial<Record<keyof IOrder, string>> = {};
+	formErrors: Partial<IOrderForm> = {};
 
 	constructor(events: EventEmitter) {
 		this.events = events;
+	}
+
+	set payment(value: string) {
+		this._order.payment = value;
+		this.events.emit('order:select');
 	}
 
 	get payment() {
@@ -26,6 +31,10 @@ export class OrderData implements IOrderData {
 
 	set address(value: string) {
 		if (this.validTextInput(value)) this._order.address = value;
+	}
+
+	get address(): string {
+		return this._order.address;
 	}
 
 	set email(value: string) {
@@ -48,16 +57,24 @@ export class OrderData implements IOrderData {
 		this._order = order;
 	}
 
-	set items(items: string[]) {
-		this._order.items = items;
-	}
-
 	get order(): IOrder {
 		return this._order;
 	}
 
+	set items(items: string[]) {
+		this._order.items = items;
+	}
+
+	get items(): string[] {
+		return this._order.items;
+	}
+
 	set total(total: number) {
 		this._order.total = total;
+	}
+
+	get total(): number {
+		return this._order.total;
 	}
 
 	cleanOrder(): void {
@@ -86,21 +103,12 @@ export class OrderData implements IOrderData {
 		return phonePattern.test(input);
 	}
 
-	// private sanitizePhoneInput(input: string) {
-	// 	return input.replace(/\D/g, '');
-	// }
-
 	setOrederParams(field: keyof IOrderForm, value: string) {
 		this._order[field] = value; // значение инпута или 'способа оплаты'
 
 		if (this.validateOrder(field)) {
 			this.events.emit('order:ready', this.order);
 		}
-	}
-
-	set payment(value: string) {
-		this._order.payment = value;
-		this.events.emit('order:select');
 	}
 
 	protected validateOrder(field: keyof IOrderForm) {

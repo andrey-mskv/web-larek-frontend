@@ -1,5 +1,3 @@
-import { IItem } from '../types';
-
 export const testItems = [
 	{
 		id: '854cef69-976d-4c2a-a18c-2aa45046c390',

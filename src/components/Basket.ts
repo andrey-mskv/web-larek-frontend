@@ -1,4 +1,3 @@
-import { IOrder } from '../types';
 import { createElement, insertSpaces } from '../utils/utils';
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
@@ -58,7 +57,6 @@ export class Basket extends Component<IBasket> {
 			} else {
 				this.setText(this._price, '');
 			}
-
 		} else {
 			this.setText(this._price, value);
 		}

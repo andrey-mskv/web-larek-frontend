@@ -1,6 +1,6 @@
 import './scss/styles.scss';
 import { AppApi } from './components/AppAPI';
-import { EventEmitter, IEvents } from './components/base/events';
+import { EventEmitter } from './components/base/events';
 import { Basket } from './components/Basket';
 import { BasketData } from './components/BasketData';
 import { Item } from './components/Item';
@@ -10,7 +10,7 @@ import { Order } from './components/Order';
 import { OrderData } from './components/OrderData';
 import { MainPage } from './components/Page';
 import { Success } from './components/Success';
-import { IItem, IOrderForm, TOrderContact, TOrderInfo } from './types';
+import { IItem, IOrderForm } from './types';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate } from './utils/utils';
 
@@ -133,7 +133,7 @@ events.on('payment:select', (data: { name: string }) => {
 events.on(
 	/^order\..*\..*:change/,
 	(data: { field: keyof IOrderForm; value: string }) => {
-	orderData.setOrederParams(data.field, data.value);
+		orderData.setOrederParams(data.field, data.value);
 	}
 );
 

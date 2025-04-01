@@ -2,7 +2,7 @@ import { IBasketData, IItem } from '../types';
 import { EventEmitter } from './base/events';
 
 export class BasketData implements IBasketData {
-	protected _total: number = 0;
+	protected _total = 0;
 	protected _items: IItem[] = [];
 	protected events: EventEmitter;
 

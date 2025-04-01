@@ -1,13 +1,7 @@
 import { Component } from './base/Component';
 import { IEvents } from './base/events';
-import { OrderData } from './OrderData';
-
-// interface IModal {
-// 	content: HTMLElement;
-// }
 
 export class Modal<T> extends Component<T> {
-	// protected element: HTMLElement;
 	protected events: IEvents;
 	protected _closeButton: HTMLButtonElement;
 	protected _content: HTMLElement;
@@ -48,7 +42,6 @@ export class Modal<T> extends Component<T> {
 		this.container.classList.remove('modal_active');
 		this.content = null; // удалить дочерние элементы
 		document.removeEventListener('keyup', this.handleEscUp);
-		// OrderData.clearErrors();
 
 		this.events.emit('modal:close');
 	}
