@@ -78,8 +78,10 @@ events.on('item:select', (data: { id: string }) => {
 events.on('preview:changed', (data: { id: string }) => {
 	const item = itemData.getItem(data.id);
 	modal.content = preview.render(item);
-	preview.orderAble(basketData.items.some((item) => item.id === data.id) ||
-		itemData.getItem(data.id).price === null);
+	preview.orderAble(
+		basketData.items.some((item) => item.id === data.id) ||
+			itemData.getItem(data.id).price === null
+	);
 	modal.open();
 });
 
@@ -97,7 +99,6 @@ events.on('basket:delete', (data: { item: IItem }) => {
 });
 
 events.on('basket:change', () => {
-
 	basket.items = basketData.items.map((item, index) => {
 		const orderItem = new Item(cloneTemplate(orderItemTemplate), events);
 		orderItem.setIndex(index + 1);

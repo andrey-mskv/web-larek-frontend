@@ -24,13 +24,10 @@ export class Order<T> extends Component<IForm> {
 		this.events = events;
 		this._form = container;
 
-		this.inputs =
-			this._form.querySelectorAll<HTMLInputElement>('.form__input');
+		this.inputs = this._form.querySelectorAll<HTMLInputElement>('.form__input');
 		this.formName = this._form.getAttribute('name');
 		this.submitButton = this._form.querySelector('button[type=submit]');
-		this.paymentButtons = this._form.querySelectorAll(
-			'button[type=button]'
-		);
+		this.paymentButtons = this._form.querySelectorAll('button[type=button]');
 		this.label = this._form.querySelector('.order__field');
 
 		this._errors = {};
@@ -88,10 +85,7 @@ export class Order<T> extends Component<IForm> {
 	}
 
 	set errors(value: string) {
-		this.setText(
-			this._form.querySelector(`#${this.formName}-errors`),
-			value
-		);
+		this.setText(this._form.querySelector(`#${this.formName}-errors`), value);
 	}
 
 	resetForm() {

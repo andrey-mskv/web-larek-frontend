@@ -53,8 +53,8 @@ export class OrderData implements IOrderData {
 		this._order = order;
 	}
 
-	getData(): IOrderForm {	
-		return this._order;	
+	getData(): IOrderForm {
+		return this._order;
 	}
 
 	cleanOrder(): void {
