@@ -27,7 +27,7 @@ export class AppApi extends Api implements ILarekApi {
 		}));
 	}
 
-	setOrder(order: IOrder): Promise<TOrderAnswer> {
+	postOrder(order: IOrder): Promise<TOrderAnswer> {
 		return this.post(`/order`, order).then((response: TOrderAnswer) => {
 			console.log('Ответ сервера:', response);
 			return response;

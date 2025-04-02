@@ -25,6 +25,6 @@ export class Success extends Component<ISuccess> {
 	}
 
 	set count(value: number) {
-		this.description.textContent = `Списано ${value.toString()} синапсов`;
+		this.setText(this.description, `Списано ${value.toString()} синапсов`);
 	}
 }

@@ -66,13 +66,11 @@ interface IBasketData {
 ```
 Заказ
 ```typescript
-interface IOrder {
+interface IOrderData {
 	payment: string;
 	email: string;
 	phone: string;
 	address: string;
-	total: number;
-	items: IItem[]; 
 }
 ```
 Интерфейс модели данных товаров
@@ -148,7 +146,7 @@ export type TOrderSecondStep = Pick<IOrder, 'email' | 'phone'>;
 - `_total: number` - количество товаров в корзине
 - `_items: IItem[]` - список товаров в корзине
 
-- `getItemsId()` - вовзращает массив id элементов товаров
+- `getIds()` - вовзращает массив id элементов товаров
 - `getTotal()` - в зависимости от того, есть ли в корзине 'бесценные' элементы (isItemsPriceNull()), возвращает общую стоимость товаров (calcTotal()) или предупреждает о невозможности оформить заказ.
 - `getCount()` - считает количество товаров в корзине
 - `addToBasket(item: Partial<IItem>)` - добавляет товар при условии его отсутствия в списке корзины `isItemInBasket(item: IItem)`
@@ -211,7 +209,7 @@ export type TOrderSecondStep = Pick<IOrder, 'email' | 'phone'>;
 
 *События изменения данных (генерируются классами моделями данных)*
 - `items:changed` - изменение массива выбранных товаров
-- `basket:changed` - изменение состояния корзины
+- `basket:change` - изменение состояния корзины
 - `preview:changed `- изменение статуса выбранной карточки товара
 - `formErrors:changed` - изменение массива ошибок
 - `order:ready` - оповещение о валидном заполнении данных заказа

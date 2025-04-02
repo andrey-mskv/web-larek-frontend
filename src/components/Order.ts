@@ -11,7 +11,7 @@ interface IForm {
 export class Order<T> extends Component<IForm> {
 	protected events: IEvents;
 
-	// protected _form: HTMLFormElement;
+	protected _form: HTMLFormElement;
 	protected formName: string;
 	protected submitButton: HTMLButtonElement;
 	protected paymentButtons: NodeListOf<HTMLButtonElement>;
@@ -22,23 +22,21 @@ export class Order<T> extends Component<IForm> {
 	constructor(container: HTMLFormElement, events: IEvents) {
 		super(container);
 		this.events = events;
+		this._form = container;
 
 		this.inputs =
-			this.container.querySelectorAll<HTMLInputElement>('.form__input');
-		this.formName = this.container.getAttribute('name');
-		this.submitButton = this.container.querySelector('button[type=submit]');
-		this.paymentButtons = this.container.querySelectorAll(
+			this._form.querySelectorAll<HTMLInputElement>('.form__input');
+		this.formName = this._form.getAttribute('name');
+		this.submitButton = this._form.querySelector('button[type=submit]');
+		this.paymentButtons = this._form.querySelectorAll(
 			'button[type=button]'
 		);
-		this.label = this.container.querySelector('.order__field');
+		this.label = this._form.querySelector('.order__field');
 
 		this._errors = {};
 
-		// для каждого инпута создается объект this.errors[имя инпута],
-		// которому присваивается элемент с id = "[имя инпута]-error"
-
 		this.inputs.forEach((input) => {
-			this._errors[input.name] = this.container.querySelector(
+			this._errors[input.name] = this._form.querySelector(
 				`#${this.formName}-errors`
 			);
 		});
@@ -49,16 +47,16 @@ export class Order<T> extends Component<IForm> {
 			});
 		});
 
-		this.container.addEventListener('input', (event: InputEvent) => {
+		this._form.addEventListener('input', (event: InputEvent) => {
 			const target = event.target as HTMLInputElement;
 			const field = target.name as keyof T;
 			const value = target.value;
 			this.onInputChange(field, value);
 		});
 
-		this.container.addEventListener('submit', (evt) => {
+		this._form.addEventListener('submit', (evt) => {
 			evt.preventDefault();
-			this.events.emit(`${this.formName}:submit`, this.getInputValues());
+			this.events.emit(`${this.formName}:submit`);
 		});
 	}
 
@@ -67,14 +65,6 @@ export class Order<T> extends Component<IForm> {
 			field,
 			value,
 		});
-	}
-
-	getInputValues() {
-		const valuesObject: Record<string, string> = {};
-		this.inputs.forEach((element) => {
-			valuesObject[element.name] = element.value;
-		});
-		return valuesObject;
 	}
 
 	set valid(isValid: boolean) {
@@ -99,8 +89,12 @@ export class Order<T> extends Component<IForm> {
 
 	set errors(value: string) {
 		this.setText(
-			this.container.querySelector(`#${this.formName}-errors`),
+			this._form.querySelector(`#${this.formName}-errors`),
 			value
 		);
+	}
+
+	resetForm() {
+		this._form.reset();
 	}
 }

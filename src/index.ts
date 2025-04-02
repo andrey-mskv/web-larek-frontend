@@ -78,7 +78,8 @@ events.on('item:select', (data: { id: string }) => {
 events.on('preview:changed', (data: { id: string }) => {
 	const item = itemData.getItem(data.id);
 	modal.content = preview.render(item);
-	preview.orderAble(basketData.items.some((item) => item.id === data.id));
+	preview.orderAble(basketData.items.some((item) => item.id === data.id) ||
+		itemData.getItem(data.id).price === null);
 	modal.open();
 });
 
@@ -93,27 +94,28 @@ events.on('basket:add', (data: { item: IItem }) => {
 // Удаление товара из корзины
 events.on('basket:delete', (data: { item: IItem }) => {
 	basketData.deleteFromBasket(data.item);
-	events.emit('basket:open');
 });
 
-events.on('basket:changed', () => {
-	mainPage.counter = basketData.getCount();
-});
+events.on('basket:change', () => {
 
-events.on('basket:open', () => {
-	modal.content = basket.render({
-		items: basketData.items.map((item, index) => {
-			const orderItem = new Item(cloneTemplate(orderItemTemplate), events);
-			orderItem.setIndex(index + 1);
-			return item ? orderItem.render(item) : null;
-		}),
-		total: basketData.getTotal(),
+	basket.items = basketData.items.map((item, index) => {
+		const orderItem = new Item(cloneTemplate(orderItemTemplate), events);
+		orderItem.setIndex(index + 1);
+		return item ? orderItem.render(item) : null;
 	});
+
+	basket.total = basketData.getTotal();
 
 	basket.activeBtn =
 		basketData.total === 0 ||
 		basketData.items.some((item) => item.price === null);
 
+	mainPage.counter = basketData.getCount();
+});
+
+events.on('basket:open', () => {
+	events.emit('basket:change');
+	modal.content = basket.render();
 	modal.open();
 });
 
@@ -151,16 +153,18 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 });
 
 events.on('order:submit', () => {
-	// contacts.errors = orderData.getErrorsValues();
 	modal.content = contacts.render();
 });
 
 events.on('contacts:submit', () => {
-	orderData.items = basketData.getItemsId();
-	orderData.total = basketData.total;
+	const order = {
+		...orderData.getData(),
+		total: basketData.total,
+		items: basketData.getIds(),
+	};
 
 	api
-		.setOrder(orderData.order)
+		.postOrder(order)
 		.then((data) => {
 			success.count = data.total;
 			events.emit('total:receved', { data: data.total });
@@ -172,6 +176,8 @@ events.on('contacts:submit', () => {
 
 events.on('total:receved', () => {
 	orderData.cleanOrder();
+	order.resetForm();
+	contacts.resetForm();
 	basketData.cleanBasket();
 	mainPage.counter = basketData.getCount();
 	modal.content = success.render();

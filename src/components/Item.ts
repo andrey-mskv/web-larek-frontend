@@ -27,9 +27,7 @@ export class Item extends Component<IItem> {
 		this.itemCategory = this.container.querySelector('.card__category');
 		this.itemIndex = this.container.querySelector('.basket__item-index');
 
-		this.itemDeleteButton = this.container.querySelector(
-			'.basket__item-delete'
-		);
+		this.itemDeleteButton = this.container.querySelector('.basket__item-delete');
 		this.itemOrderButton = this.container.querySelector('.button');
 
 		if (this.itemDeleteButton) {

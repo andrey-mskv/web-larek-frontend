@@ -53,5 +53,5 @@ export type TOrderAnswer = { id: string; total: number };
 export interface ILarekApi {
 	getItems: () => Promise<IItem[]>;
 	getItem: (id: string) => Promise<IItem>;
-	setOrder: (oreder: IOrder) => Promise<TOrderAnswer>;
+	postOrder: (oreder: IOrder) => Promise<TOrderAnswer>;
 }

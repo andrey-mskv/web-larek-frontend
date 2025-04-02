@@ -10,7 +10,7 @@ export class BasketData implements IBasketData {
 		this.events = events;
 	}
 
-	getItemsId() {
+	getIds() {
 		return this._items.map((item) => item.id);
 	}
 
@@ -56,13 +56,13 @@ export class BasketData implements IBasketData {
 	addToBasket(item: Partial<IItem>): void {
 		if (!this.isItemInBasket(item as IItem)) {
 			this._items.push({ ...item } as IItem);
-			this.events.emit('basket:changed');
+			this.events.emit('basket:change');
 		}
 	}
 
 	deleteFromBasket(item: Partial<IItem>): void {
 		this._items = this._items.filter((elem) => elem.id !== item.id);
-		this.events.emit('basket:changed');
+		this.events.emit('basket:change');
 	}
 
 	cleanBasket(): void {

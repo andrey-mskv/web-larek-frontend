@@ -2,17 +2,13 @@ import { IOrder, IOrderData, IOrderForm } from '../types';
 import { errorCategory } from '../utils/constants';
 import { EventEmitter } from './base/events';
 
-// type FormErrors = Partial<Record<keyof IOrder, string>>;
-
 export class OrderData implements IOrderData {
 	private events: EventEmitter;
-	private _order: IOrder = {
+	private _order: IOrderForm = {
 		payment: '',
 		email: '',
 		phone: '',
 		address: '',
-		total: 0,
-		items: [],
 	};
 	formErrors: Partial<IOrderForm> = {};
 
@@ -57,33 +53,15 @@ export class OrderData implements IOrderData {
 		this._order = order;
 	}
 
-	get order(): IOrder {
-		return this._order;
-	}
-
-	set items(items: string[]) {
-		this._order.items = items;
-	}
-
-	get items(): string[] {
-		return this._order.items;
-	}
-
-	set total(total: number) {
-		this._order.total = total;
-	}
-
-	get total(): number {
-		return this._order.total;
+	getData(): IOrderForm {	
+		return this._order;	
 	}
 
 	cleanOrder(): void {
-		this._order.items = [];
 		this._order.address = '';
 		this._order.email = '';
 		this._order.phone = '';
 		this._order.payment = '';
-		this._order.total = 0;
 	}
 
 	// проверка текстового поля
@@ -104,7 +82,7 @@ export class OrderData implements IOrderData {
 	}
 
 	setOrederParams(field: keyof IOrderForm, value: string) {
-		this._order[field] = value; // значение инпута или 'способа оплаты'
+		this._order[field] = value;
 
 		if (this.validateOrder(field)) {
 			this.events.emit('order:ready', this.order);
@@ -129,7 +107,7 @@ export class OrderData implements IOrderData {
 		this.formErrors = errors;
 
 		this.events.emit('formErrors:change', this.formErrors);
-		return Object.values(errors).length === 0; // true - если нет ошибок
+		return Object.values(errors).length === 0;
 	}
 
 	protected validateField(field: keyof IOrderForm, value: string) {
