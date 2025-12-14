@@ -45,6 +45,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "node-forge": "^1.3.3",
     "save-dev": "^0.0.1-security"
   }
 }
